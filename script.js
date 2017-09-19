@@ -7,7 +7,7 @@ $(document).ready(function(){
 	var speedMultiplier = 5;
 	var spawnRate = 0.5;
 
-	var getRandomData = function(){
+	var randomPosition = function(){
 		var data = [];
 		for(var j = 0; j < gridSize; j++){
 			var row = [];
@@ -30,9 +30,7 @@ $(document).ready(function(){
 				if(data[i][j] == 1){
 					ctx.fillRect(j*size, i*size, size, size);
 					ctx.stroke();
-				}else{
-
-				}	
+				}
 			}
 		}
 	}
@@ -62,23 +60,18 @@ $(document).ready(function(){
 	var nextBoard = function(data){
 		var deathIds = [];
 		var lifeIds = [];
-
 		for(var i = 0; i < data.length; i++){
 			for(var j = 0; j < data[i].length; j++){
 				var n = countNeighbours(data,[i,j]);
-				//if the cell is alive
-				if(data[i][j] == 1){
-					//if cell has less than 2 neighbours or more than 3 neighbours		
-					if(n < 2 || n > 3){
+				//if the cell is alive and has less than 2 neighbours or more than 3 neighbours
+				if(data[i][j] == 1 && (n < 2 || n > 3)){		
+					
 						deathIds.push([i,j]);
-					}
+					
 				}
-				//if the cell is dead
-				else{
-					//if the cell has exactly 3 neighbours
-					if(n==3){
-						lifeIds.push([i,j]);
-					}
+				//if the cell is dead and the cell has exactly 3 neighbours
+				else if(data[i][j] == 0 && n==3){			
+					lifeIds.push([i,j]);			
 				}
 			}
 		}
@@ -98,15 +91,11 @@ $(document).ready(function(){
 		drawFromData(startData);
 	}
 
-	
-	var startData = getRandomData();
-	drawFromData(startData);
-	var interval = setInterval(update, 200/speedMultiplier);
-
+	//User Inputs/Variables
 	$('#size').change(function(){
 		size = $(this).val();
 		gridSize = 900/size;
-		startData = getRandomData();
+		startData = randomPosition();
 		drawFromData(startData);
 	});
 
@@ -118,16 +107,18 @@ $(document).ready(function(){
 	
 	$('#spawn').change(function(){
 		spawnRate = $(this).val()/100;
-		startData = getRandomData();
+		startData = randomPosition();
 		drawFromData(startData);
 	});
 
 	$('#reset').click(function(){
-		startData = getRandomData();
+		startData = randomPosition();
 		drawFromData(startData);
 	});
 
+	//START game 
+	var startData = randomPosition();
+	drawFromData(startData);
+	var interval = setInterval(update, 200/speedMultiplier);
 
-
-	
 });
