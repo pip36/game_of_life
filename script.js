@@ -2,8 +2,9 @@ $(document).ready(function(){
 
 	var canvas = document.getElementById("Canvas"); 
 	var ctx = canvas.getContext("2d"); 
-	var gridSize = 180;
-	size = 5;
+	var size = 7;
+	var gridSize = 900/size;
+	var speedMultiplier = 5;
 
 	var getRandomData = function(){
 		var data = [];
@@ -95,13 +96,24 @@ $(document).ready(function(){
 		startData = nextBoard(startData);
 		drawFromData(startData);
 	}
+
 	
 	var startData = getRandomData();
 	drawFromData(startData);
+	var interval = setInterval(update, 200/speedMultiplier);
 
-	
+	$('#size').change(function(){
+		size = $(this).val();
+		gridSize = 900/size;
+		startData = getRandomData();
+		drawFromData(startData);
+	});
 
-	setInterval(update, 60);
+	$('#speed').change(function(){
+		speedMultiplier = $(this).val();
+		clearInterval(interval);
+		interval = setInterval(update, 200/speedMultiplier);
+	});
 	
 
 
