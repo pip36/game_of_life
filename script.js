@@ -5,13 +5,14 @@ $(document).ready(function(){
 	var size = 7;
 	var gridSize = 900/size;
 	var speedMultiplier = 5;
+	var spawnRate = 0.5;
 
 	var getRandomData = function(){
 		var data = [];
 		for(var j = 0; j < gridSize; j++){
 			var row = [];
 			for(var i = 0; i < gridSize; i++){
-				if(Math.random() > 0.5){
+				if(Math.random() < spawnRate){
 					row.push(1);
 				}else{
 					row.push(0);
@@ -115,6 +116,16 @@ $(document).ready(function(){
 		interval = setInterval(update, 200/speedMultiplier);
 	});
 	
+	$('#spawn').change(function(){
+		spawnRate = $(this).val()/100;
+		startData = getRandomData();
+		drawFromData(startData);
+	});
+
+	$('#reset').click(function(){
+		startData = getRandomData();
+		drawFromData(startData);
+	});
 
 
 
